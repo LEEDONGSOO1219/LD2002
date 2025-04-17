@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>중고마켓</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 기존 스타일 유지 */
+        .navbar-nav .nav-item {
+            text-align: center;
+        }
+
+        .navbar-nav {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 3px;
+            justify-content: space-between;
+            width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            align-items: center;
+        }
+
+        .navbar-custom .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        #mainLogo {
+            font-size: 1.5rem;
+            font-family: 'Your Desired Font', sans-serif;
+            color: #333;
+            text-decoration: none;
+        }
+
+        #mainLogo:hover {
+            background-color: transparent;
+            color: #333;
+            text-decoration: none;
+            border-bottom: none;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .navbar-custom {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .navbar-custom .nav-link {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background-color: transparent;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .product-card img {
+            border-radius: 1rem;
+            object-fit: cover;
+            max-height: 200px;
+            width: 100%;
+        }
+
+        .product-card h5 {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .product-card p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 4rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1050;
+            display: none;
+            width: 600px;
+            height: auto;
+        }
+
+        .mypage-section {
+            background-color: #fff;
+            padding: 2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1150px;
+            margin: 2rem auto;
+        }
+
+        .product-list {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 2rem;
+            min-width: 250px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card img {
+            border-radius: 1rem;
+            object-fit: cover;
+            max-height: 200px;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card img:hover {
+            transform: scale(1.03);
+        }
+
+        .btn.btn-primary {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn.btn-primary:hover {
+            transform: scale(1.05);
+            background-color: #0069d9;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 5px;
+        }
+
+        .nav-link:hover {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            background-color: transparent;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1040;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1050;
+        }
+
+        #loginModal,
+        #signupModal,
+        #mypageModal,
+        #messageBox,
+        #productRegistrationSection,
+        #editProductModal {
+            display: none;
+        }
+
+        .my-product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+        }
+
+        .my-product-item {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .my-product-item img {
+            border-radius: 0.75rem;
+            object-fit: cover;
+            max-height: 150px;
+            width: 100%;
+        }
+
+        .my-product-item h6 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .my-product-item p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .my-product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .my-product-actions button {
+            flex-grow: 1;
+            padding: 0.5rem 0;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        #editProductModal .modal-content {
+            padding: 2rem;
+        }
+
+        #editProductModal label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        #editProductModal input[type="text"],
+        #editProductModal input[type="number"],
+        #editProductModal textarea,
+        #editProductModal select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            box-sizing: border-box;
+        }
+
+        #editProductModal .btn-primary,
+        #editProductModal .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        #editProductModal .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        #editProductModal .btn-primary {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-custom">
+        <div class="container">
+            <ul class="navbar-nav flex-row flex-nowrap gap-3"
+                style="justify-content: space-between; padding-left: 2rem; padding-right: 2rem;">
+                <li class="nav-item"><a id="mainLogo" class="nav-link" href="#"
+                        style="text-decoration: none; cursor: default;">중고마켓</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showHome()">홈</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showProductRegistration()">상품 등록</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showMypage()">마이페이지</a></li>
+                <li class="nav-item" style="width: 70px;">
+                    <a id="loginBtn" class="nav-link" href="#" onclick="handleLoginClick()">로그인</a>
+                    <a id="logoutBtn" class="nav-link d-none" href="#" onclick="logout()">로그아웃</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSignup()">회원가입</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal-card" id="loginModal">
+        <button class="btn-close" id="closeLoginBtn" aria-label="Close"
+            style="position: absolute; top: 10px; right: 10px;"></button>
+        <h5 class="mb-3">로그인</h5>
+        <input type="text" id="loginId" class="form-control mb-2" placeholder="아이디">
+        <input type="password" id="loginPw" class="form-control mb-3" placeholder="비밀번호">
+        <button class="btn btn-primary w-100" onclick="login()">로그인</button>
+    </div>
+
+    <div class="modal-card" id="signupModal">
+        <button class="btn-close" id="closeSignupBtn" aria-label="Close"
+            style="position: absolute; top: 10px; right: 10px;"></button>
+        <h5 class="mb-3">회원가입</h5>
+        <input type="text" id="signupId" class="form-control mb-2" placeholder="아이디">
+        <input type="password" id="signupPw" class="form-control mb-3" placeholder="비밀번호">
+        <button class="btn btn-success w-100" onclick="signup()">회원가입</button>
+    </div>
+
+    <div class="overlay" id="messageBox">
+        <div class="popup">
+            <p id="messageText">메시지</p>
+            <button class="btn btn-primary mt-3" onclick="confirmMessage()">확인</button>
+        </div>
+    </div>
+
+    <div class="mypage-section" id="mypageModal">
+        <h5 class="mb-3">마이페이지</h5>
+
+        <div class="mypage-card">
+            <h5>사용자 정보</h5>
+            <p><strong>아이디:</strong> <span id="mypageId"></span></p>
+            <p><strong>이메일:</strong> <span id="mypageEmail"></span></p>
+            <p><strong>전화번호:</strong> <span id="mypagePhone"></span></p>
+            <p><strong>주소:</strong> <span id="mypageAddress"></span></p>
+        </div>
+
+        <div class="mypage-card">
+            <h5>나의 판매 상품</h5>
+            <div id="myProductList" class="my-product-list">
+            </div>
+        </div>
+
+        <div class="mypage-card">
+            <h5>구매 내역</h5>
+            <ul id="purchaseList">
+                <li>구매 내역이 없습니다.</li>
+            </ul>
+        </div>
+
+        <div class="mypage-card">
+            <h5>즐겨찾기 목록</h5>
+            <ul id="favoriteList">
+                <li>즐겨찾기한 상품이 없습니다.</li>
+            </ul>
+        </div>
+
+        <div class="mypage-card">
+            <h5>회원 정보 수정</h5>
+            <input type="text" id="editEmail" class="form-control mb-2" placeholder="새 이메일">
+            <input type="text" id="editPhone" class="form-control mb-2" placeholder="새 전화번호">
+            <input type="text" id="editAddress" class="form-control mb-2" placeholder="새 주소"> <button
+                class="btn btn-primary" onclick="updateUserInfo()">정보 수정</button>
+        </div>
+
+        <div class="mypage-card">
+            <h5>비밀번호 변경</h5>
+            <input type="password" id="editPassword" class="form-control mb-2" placeholder="새 비밀번호">
+            <button class="btn btn-warning" onclick="changePassword()">비밀번호 변경</button>
+        </div>
+    </div>
+
+    <div class="modal-card" id="editProductModal">
+        <div class="modal-content">
+            <button class="btn-close" onclick="closeEditProductModal()" aria-label="Close"
+                style="position: absolute; top: 10px; right: 10px;"></button>
+            <h5 class="mb-3">상품 수정</h5>
+            <form id="editProductForm">
+                <input type="hidden" id="editProductId">
+                <div class="mb-3">
+                    <label for="editProductName" class="form-label">상품명</label>
+                    <input type="text" class="form-control" id="editProductName" placeholder="상품 이름을 입력해주세요" required>
+                </div>
+                <div class="mb-3">
+                    <label for="editProductPrice" class="form-label">가격</label>
+                    <input type="number" class="form-control" id="editProductPrice" placeholder="상품 가격을 입력해주세요"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="editProductDescription" class="form-label">상품 설명</label>
+                    <textarea class="form-control" id="editProductDescription" rows="5"
+                        placeholder="상품에 대한 자세한 설명을 입력해주세요"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="editProductImage
+                    " class="form-label">상품 이미지</label>
+                    <input type="file" class="form-control" id="editProductImage" accept="image/*">
+                    <small class="text-muted">새 이미지를 선택하지 않으면 기존 이미지가 유지됩니다.</small>
+                    <img id="currentProductImage" src="" alt="현재 상품 이미지" style="max-width: 100px; margin-top: 10px;">
+                </div>
+                <div class="mb-3">
+                    <label for="editProductCategory" class="form-label">카테고리</label>
+                    <select class="form-select" id="editProductCategory">
+                        <option value="digital">디지털/가전</option>
+                        <option value="furniture">가구/인테리어</option>
+                        <option value="fashion">의류/잡화</option>
+                        <option value="sports">스포츠/레저</option>
+                        <option value="books">도서/음반/취미</option>
+                        <option value="etc">기타</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="editProductCondition" class="form-label">상품 상태</label>
+                    <select class="form-select" id="editProductCondition">
+                        <option value="new">새 상품</option>
+                        <option value="used_like_new">거의 새 것</option>
+                        <option value="used_good">상태 양호</option>
+                        <option value="used_fair">사용감 있음</option>
+                        <option value="broken">하자 있음</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">수정하기</button>
+                <button type="button" class="btn btn-secondary" onclick="closeEditProductModal()">취소</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container my-5" id="productRegistrationSection" style="display: none;">
+        <h4 class="text-center mb-4">상품 등록</h4>
+        <form id="productForm">
+            <div class="mb-3">
+                <label for="productName" class="form-label">상품명</label>
+                <input type="text" class="form-control" id="productName" placeholder="상품 이름을 입력해주세요" required>
+            </div>
+            <div class="mb-3">
+                <label for="productPrice" class="form-label">가격</label>
+                <input type="number" class="form-control" id="productPrice" placeholder="상품 가격을 입력해주세요" required>
+            </div>
+            <div class="mb-3">
+                <label for="productDescription" class="form-label">상품 설명</label>
+                <textarea class="form-control" id="productDescription" rows="5"
+                    placeholder="상품에 대한 자세한 설명을 입력해주세요"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="productImage" class="form-label">상품 이미지</label>
+                <input type="file" class="form-control" id="productImage" accept="image/*" required>
+            </div>
+            <div class="mb-3">
+                <label for="productCategory" class="form-label">카테고리</label>
+                <select class="form-select" id="productCategory">
+                    <option value="digital">디지털/가전</option>
+                    <option value="furniture">가구/인테리어</option>
+                    <option value="fashion">의류/잡화</option>
+                    <option value="sports">스포츠/레저</option>
+                    <option value="books">도서/음반/취미</option>
+                    <option value="etc">기타</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="productCondition" class="form-label">상품 상태</label>
+                <select class="form-select" id="productCondition">
+                    <option value="new">새 상품</option>
+                    <option value="used_like_new">거의 새 것</option>
+                    <option value="used_good">상태 양호</option>
+                    <option value="used_fair">사용감 있음</option>
+                    <option value="broken">하자 있음</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">등록하기</button>
+            <button type="button" class="btn btn-secondary w-100 mt-2" onclick="hideProductRegistration()">취소</button>
+        </form>
+    </div>
+
+    <div class="container my-5" id="homeSection">
+        <div style="margin-bottom: 1rem;">
+            <h4 class="text-start mb-3 me-3" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: bold;">등록 상품</h4>
+            <div id="homeProductList" class="product-list"
+                style="display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 1.5rem; padding-bottom: 1rem;">
+
+            </div>
+        </div>
+    </div>
+    <script>
+        const loginModal = document.getElementById("loginModal");
+        const signupModal = document.getElementById("signupModal");
+        const messageBox = document.getElementById("messageBox");
+        const messageText = document.getElementById("messageText");
+        const mypageModal = document.getElementById("mypageModal");
+        const mypageSection = document.querySelector(".mypage-section");
+        const homeProductListDiv = document.getElementById("homeProductList");
+        const myProductListDiv = document.getElementById("myProductList");
+        const editProductModal = document.getElementById("editProductModal");
+        const editProductForm = document.getElementById("editProductForm");
+
+        let products = localStorage.getItem("products");
+        products = products ? JSON.parse(products) : [];
+
+        // X 버튼 클릭 시 로그인 모달 닫기
+        document.getElementById('closeLoginBtn').addEventListener('click', function () {
+            loginModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+            messageBox.style.display = "none";
+        });
+
+        // X 버튼 클릭 시 회원가입 모달 닫기
+        document.getElementById('closeSignupBtn').addEventListener('click', function () {
+            signupModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+            messageBox.style.display = "none";
+        });
+
+        function showLogin() {
+            loginModal.style.display = "block";
+            signupModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "block";
+        }
+
+        function showSignup() {
+            signupModal.style.display = "block";
+            loginModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "block";
+        }
+
+        function handleLoginClick() {
+            if (localStorage.getItem("loggedIn") === "true") {
+                alert("이미 로그인된 상태입니다");
+            } else {
+                showLogin();
+            }
+        }
+
+        function signup() {
+            const id = document.getElementById("signupId").value;
+            const pw = document.getElementById("signupPw").value;
+
+            if (!id || !pw) {
+                alert("아이디와 비밀번호를 입력해주세요");
+                return;
+            }
+
+            const userData = { id, pw, email: "", phone: "", address: "" };
+            localStorage.setItem("userData", JSON.stringify(userData));
+            localStorage.setItem("loggedIn", "true");
+
+            signupModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+            showMessage("회원가입이 완료되었습니다");
+            document.getElementById("loginBtn").classList.add("d-none");
+            document.getElementById("logoutBtn").classList.remove("d-none");
+        }
+
+        function login() {
+            const id = document.getElementById("loginId").value;
+            const pw = document.getElementById("loginPw").value;
+
+            const saved = JSON.parse(localStorage.getItem("userData"));
+
+            if (saved && id === saved.id && pw === saved.pw) {
+                localStorage.setItem("loggedIn", "true");
+                loginModal.style.display = "none";
+                document.querySelector(".overlay").style.display = "none";
+                showMessage("로그인이 완료되었습니다");
+                document.getElementById("loginBtn").classList.add("d-none");
+                document.getElementById("logoutBtn").classList.remove("d-none");
+            } else {
+                alert("아이디 또는 비밀번호가 틀렸습니다.");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("loggedIn");
+            showMessage("로그아웃 되었습니다");
+            document.getElementById("logoutBtn").classList.add("d-none");
+            document.getElementById("loginBtn").classList.remove("d-none");
+            showHome(); // 로그아웃 후 홈 화면으로 이동
+        }
+
+        function showMessage(msg) {
+            messageText.textContent = msg;
+            messageBox.style.display = "flex";
+        }
+
+        function confirmMessage() {
+            messageBox.style.display = "none";
+        }
+
+        function showMypage() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            if (loggedIn === "true" && user) {
+                document.getElementById("mypageId").textContent = user.id;
+                document.getElementById("mypageEmail").textContent = user.email || "없음";
+                document.getElementById("mypagePhone").textContent = user.phone || "없음";
+                document.getElementById("mypageAddress").textContent = user.address || "없음";
+
+                loadMyProducts();
+
+                document.getElementById("purchaseList").innerHTML = `<li>구매 내역이 없습니다.</li>`;
+                document.getElementById("favoriteList").innerHTML = `<li>즐겨찾기한 상품이 없습니다.</li>`;
+
+                mypageModal.style.display = "block";
+                mypageSection.style.display = "block";
+
+                document.getElementById("homeSection").style.display = "none";
+                document.getElementById("productRegistrationSection").style.display = "none";
+                editProductModal.style.display = "none";
+
+                updateLoginLogoutButtons();
+
+            } else {
+                alert("로그인 후 이용해주세요.");
+            }
+        }
+
+        function loadMyProducts() {
+            const loggedInUser = JSON.parse(localStorage.getItem("userData"));
+            if (!loggedInUser || !loggedInUser.id) return;
+
+            const myProducts = products.filter(product => product.sellerId === loggedInUser.id);
+            myProductListDiv.innerHTML = "";
+
+            myProducts.forEach((product, index) => {
+                const productItem = document.createElement("div");
+                productItem.classList.add("my-product-item");
+
+                const image = document.createElement("img");
+                image.src = product.image;
+                image.alt = product.name;
+
+                const title = document.createElement("h6");
+                title.textContent = product.name;
+
+                const price = document.createElement("p");
+                price.textContent = `${parseInt(product.price).toLocaleString()}원`;
+
+                const actions = document.createElement("div");
+                actions.classList.add("my-product-actions");
+
+                const editButton = document.createElement("button");
+                editButton.classList.add("edit-btn");
+                editButton.textContent = "수정";
+                editButton.onclick = () => showEditProductModal(product.id);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete-btn");
+                deleteButton.textContent = "삭제";
+                deleteButton.onclick = () => deleteProduct(product.id);
+
+                actions.appendChild(editButton);
+                actions.appendChild(deleteButton);
+
+                productItem.appendChild(image);
+                productItem.appendChild(title);
+                productItem.appendChild(price);
+                productItem.appendChild(actions);
+
+                myProductListDiv.appendChild(productItem);
+            });
+            if (myProducts.length === 0) {
+                myProductListDiv.innerHTML = "<p>등록된 상품이 없습니다.</p>";
+            }
+        }
+
+        let currentEditingProductId = null;
+
+        function showEditProductModal(productId) {
+            const productToEdit = products.find(p => p.id === productId);
+            if (productToEdit) {
+                currentEditingProductId = productId;
+                document.getElementById("editProductId").value = productToEdit.id;
+                document.getElementById("editProductName").value = productToEdit.name;
+                document.getElementById("editProductPrice").value = productToEdit.price;
+                document.getElementById("editProductDescription").value = productToEdit.description;
+                document.getElementById("currentProductImage").src = productToEdit.image;
+                document.getElementById("editProductCategory").value = productToEdit.category;
+                document.getElementById("editProductCondition").value = productToEdit.condition;
+                editProductModal.style.display = "block";
+                document.querySelector(".overlay").style.display = "block";
+            }
+        }
+
+        function closeEditProductModal() {
+            editProductModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+            currentEditingProductId = null;
+        }
+
+        editProductForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!currentEditingProductId) return;
+
+            const updatedName = document.getElementById("editProductName").value;
+            const updatedPrice = document.getElementById("editProductPrice").value;
+            const updatedDescription = document.getElementById("editProductDescription").value;
+            const updatedCategory = document.getElementById("editProductCategory").value;
+            const updatedCondition = document.getElementById("editProductCondition").value;
+            const newImageFile = document.getElementById("editProductImage").files[0];
+
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const updatedProducts = products.map(product => {
+                    if (product.id === currentEditingProductId) {
+                        return {
+                            ...product,
+                            name: updatedName,
+                            price: updatedPrice,
+                            description: updatedDescription,
+                            category: updatedCategory,
+                            condition: updatedCondition,
+                            image: newImageFile ? reader.result : product.image
+                        };
+                    }
+                    return product;
+                });
+
+                localStorage.setItem("products", JSON.stringify(updatedProducts));
+                products = updatedProducts;
+                closeEditProductModal();
+                loadMyProducts();
+                displayProductsOnHome();
+                showMessage("상품 정보가 수정되었습니다.");
+            }
+
+            if (newImageFile) {
+                reader.readAsDataURL(newImageFile);
+            } else {
+                const updatedProducts = products.map(product => {
+                    if (product.id === currentEditingProductId) {
+                        return {
+                            ...product,
+                            name: updatedName,
+                            price: updatedPrice,
+                            description: updatedDescription,
+                            category: updatedCategory,
+                            condition: updatedCondition
+                        };
+                    }
+                    return product;
+                });
+                localStorage.setItem("products", JSON.stringify(updatedProducts));
+                products = updatedProducts;
+                closeEditProductModal();
+                loadMyProducts();
+                displayProductsOnHome();
+                showMessage("상품 정보가 수정되었습니다.");
+            }
+        });
+
+        function deleteProduct(productId) {
+            if (confirm("정말로 이 상품을 삭제하시겠습니까?")) {
+                const updatedProducts = products.filter(product => product.id !== productId);
+                localStorage.setItem("products", JSON.stringify(updatedProducts));
+                products = updatedProducts;
+                loadMyProducts();
+                displayProductsOnHome();
+                showMessage("상품이 삭제되었습니다.");
+            }
+        }
+
+        function updateUserInfo() {
+            const newEmail = document.getElementById("editEmail").value;
+            const newPhone = document.getElementById("editPhone").value;
+            const newAddress = document.getElementById("editAddress").value;
+
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            if (user) {
+                user.email = newEmail;
+                user.phone = newPhone;
+                user.address = newAddress;
+
+                localStorage.setItem("userData", JSON.stringify(user));
+                showMessage("회원 정보가 수정되었습니다.");
+
+                document.getElementById("mypageEmail").textContent = newEmail || "없음";
+                document.getElementById("mypagePhone").textContent = newPhone || "없음";
+                document.getElementById("mypageAddress").textContent = newAddress || "없음";
+
+                document.getElementById("editEmail").value = "";
+                document.getElementById("editPhone").value = "";
+                document.getElementById("editAddress").value = "";
+
+                updateLoginLogoutButtons();
+
+            } else {
+                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
+            }
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById("editPassword").value;
+
+            if (!newPassword) {
+                alert("새 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            if (user) {
+                user.pw = newPassword;
+                localStorage.setItem("userData", JSON.stringify(user));
+                showMessage("비밀번호가 변경되었습니다.");
+
+                document.getElementById("editPassword").value = "";
+
+                updateLoginLogoutButtons();
+            } else {
+                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
+            }
+        }
+
+        function closeMypage() {
+            mypageModal.style.display = "none";
+            mypageSection.style.display = "none";
+            editProductModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+        }
+
+        function showHome() {
+            mypageModal.style.display = "none";
+            mypageSection.style.display = "none";
+            document.getElementById("productRegistrationSection").style.display = "none";
+            editProductModal.style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+            document.getElementById("homeSection").style.display = "block";
+            displayProductsOnHome();
+        }
+
+        function updateLoginLogoutButtons() {
+            if (localStorage.getItem("loggedIn") === "true") {
+                document.getElementById("loginBtn").classList.add("d-none");
+                document.getElementById("logoutBtn").classList.remove("d-none");
+            } else {
+                document.getElementById("loginBtn").classList.remove("d-none");
+                document.getElementById("logoutBtn").classList.add("d-none");
+            }
+        }
+
+        function generateProductId() {
+            return Math.random().toString(36).substring(2, 15);
+        }
+
+        function displayProductsOnHome() {
+            homeProductListDiv.innerHTML = "";
+            products.forEach(product => {
+                const productCard = document.createElement("div");
+                productCard.classList.add("product-card");
+                productCard.style.minWidth = "250px";
+
+                const title = document.createElement("h5");
+                title.textContent = product.name;
+
+                const image = document.createElement("img");
+                image.src = product.image;
+                image.alt = product.name;
+                image.style.width = "100%";
+                image.style.height = "200px";
+                image.style.objectFit = "cover";
+                image.style.borderRadius = "1rem";
+
+                const price = document.createElement("p");
+                price.innerHTML = `가격: <span style="color: red;">${parseInt(product.price).toLocaleString()}</span>원`;
+
+                const buyButton = document.createElement("button");
+                buyButton.classList.add("btn", "btn-primary");
+                buyButton.textContent = "구매하기";
+                // TODO: 구매하기 기능 추가
+
+                productCard.appendChild(title);
+                productCard.appendChild(image);
+                productCard.appendChild(price);
+                productCard.appendChild(buyButton);
+
+                homeProductListDiv.appendChild(productCard);
+            });
+            if (products.length === 0) {
+                homeProductListDiv.innerHTML = "<p>등록된 상품이 없습니다. (상품 등록을 해주세요)</p>";
+            }
+        }
+
+        window.onload = () => {
+            updateLoginLogoutButtons();
+            displayProductsOnHome();
+        }
+
+        document.querySelector('.overlay').addEventListener('click', function (event) {
+            if (event.target === this) {
+                loginModal.style.display = "none";
+                signupModal.style.display = "none";
+                editProductModal.style.display = "none";
+                messageBox.style.display = "none";
+                this.style.display = "none";
+            }
+        });
+
+        // 상품 등록 섹션 보이기
+        function showProductRegistration() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            if (loggedIn === "true") {
+                document.getElementById("homeSection").style.display = "none";
+                document.getElementById("productRegistrationSection").style.display = "block";
+            } else {
+                alert("로그인 후 이용해주세요.");
+            }
+        }
+
+        // 상품 등록 섹션 숨기기
+        function hideProductRegistration() {
+            document.getElementById("homeSection").style.display = "block";
+            document.getElementById("productRegistrationSection").style.display = "none";
+            document.getElementById("productForm").reset();
+        }
+
+        // 상품 등록 폼 제출 처리
+        document.getElementById("productForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const productName = document.getElementById("productName").value;
+            const productPrice = document.getElementById("productPrice").value;
+            const productDescription = document.getElementById("productDescription").value;
+            const productImageFile = document.getElementById("productImage").files[0];
+            const productCategory = document.getElementById("productCategory").value;
+            const productCondition = document.getElementById("productCondition").value;
+
+            if (!productName || !productPrice || !productImageFile) {
+                alert("상품명, 가격, 이미지는 필수 입력 항목입니다.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const newProduct = {
+                    id: generateProductId(),
+                    name: productName,
+                    price: productPrice,
+                    description: productDescription,
+                    image: reader.result,
+                    category: productCategory,
+                    condition: productCondition,
+                    sellerId: JSON.parse(localStorage.getItem("userData")).id
+                };
+
+                products.push(newProduct);
+                localStorage.setItem("products", JSON.stringify(products));
+
+                alert("상품이 등록되었습니다.");
+                document.getElementById("productForm").reset();
+                hideProductRegistration();
+                displayProductsOnHome();
+            }
+
+            reader.readAsDataURL(productImageFile);
+        });
+    </script>
+
+</body>
+
+</html>
